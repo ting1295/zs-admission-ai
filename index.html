@@ -6,8 +6,25 @@
     <title>中山大学（东莞校区）招生智能咨询中心</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Microsoft YaHei', sans-serif; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 800px; width: 100%; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 64, 152, 0.1); padding: 40px; margin-top: 20px; }
+        body { 
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            position: relative;
+        }
+        .container { 
+            max-width: 800px; 
+            width: 100%; 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0, 64, 152, 0.1); 
+            padding: 40px; 
+            margin-top: 20px; 
+            z-index: 1;
+        }
         .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #004098; padding-bottom: 20px; }
         .header h1 { color: #004098; font-size: 2.2em; margin-bottom: 10px; }
         .header p { color: #666; font-size: 1.1em; line-height: 1.6; }
@@ -18,11 +35,22 @@
         .note { background: #fff8e1; border: 1px dashed #ffb300; padding: 15px; border-radius: 10px; margin-top: 25px; text-align: center; font-size: 0.95em; color: #5d4037; }
         .footer { margin-top: 30px; text-align: center; color: #888; font-size: 0.9em; }
         
-        /* 聊天按钮加载前的占位提示 */
-        #chat-loading-msg { position: fixed; bottom: 90px; right: 20px; background: #004098; color: white; padding: 10px 15px; border-radius: 8px; font-size: 0.9em; display: none; }
+        /* Coze SDK 自定义样式覆盖 */
+        :root {
+            --coze-primary-color: #004098 !important; /* 中大蓝色 */
+            --coze-bubble-size: 60px !important;
+            --coze-bubble-icon-size: 28px !important;
+        }
         
-        /* 内置聊天窗口样式（备用方案） */
-        .chat-icon {
+        /* 强制显示SDK按钮的样式 */
+        .coze-chat-container {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* 加载提示 */
+        .coze-loading {
             position: fixed;
             bottom: 30px;
             right: 30px;
@@ -35,109 +63,11 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-        .chat-icon:hover {
-            background-color: #003080;
-        }
-        .chat-icon svg {
-            width: 30px;
-            height: 30px;
-            fill: white;
-        }
-        
-        .chat-window {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 380px;
-            max-height: 500px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-            display: none;
-            flex-direction: column;
-            z-index: 1000;
-            overflow: hidden;
-            border: 1px solid #ddd;
-        }
-        .chat-header {
-            background: #004098;
+            z-index: 9999;
             color: white;
-            padding: 15px 20px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .chat-body {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: #f9f9f9;
-            min-height: 300px;
-            max-height: 350px;
-        }
-        .message {
-            margin-bottom: 12px;
-            max-width: 85%;
-            clear: both;
-        }
-        .bot-message {
-            background: #e9e9e9;
-            padding: 10px 15px;
-            border-radius: 18px 18px 18px 5px;
-            float: left;
-        }
-        .user-message {
-            background: #004098;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 18px 18px 5px 18px;
-            float: right;
-        }
-        .chat-input {
-            display: flex;
-            border-top: 1px solid #ddd;
-            background: white;
-        }
-        .chat-input input {
-            flex: 1;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            outline: none;
-        }
-        .send-btn {
-            background: #004098;
-            color: white;
-            border: none;
-            padding: 0 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .send-btn:hover {
-            background: #003080;
-        }
-        
-        @media (max-width: 768px) {
-            .chat-window {
-                width: 90%;
-                right: 5%;
-                height: 60%;
-                bottom: 80px;
-            }
-            .chat-icon {
-                bottom: 20px;
-                right: 20px;
-            }
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
         }
     </style>
 </head>
@@ -169,192 +99,190 @@
         </div>
     </div>
 
-    <!-- 聊天按钮加载提示 -->
-    <div id="chat-loading-msg">正在加载AI助手，请稍候...</div>
-    
-    <!-- 内置聊天窗口（备用方案） -->
-    <div class="chat-icon" id="chatIcon" style="display: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-        </svg>
+    <!-- Coze SDK 加载提示 -->
+    <div id="cozeLoading" class="coze-loading">
+        加载中...
     </div>
 
-    <div class="chat-window" id="chatWindow">
-        <div class="chat-header">
-            <span>中山大学招生AI助手</span>
-            <button class="close-btn" id="closeBtn">×</button>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="message bot-message">
-                您好！我是中山大学（东莞校区）招生AI助手，很高兴为您服务！请问有什么可以帮您？
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="userInput" placeholder="输入您的问题，例如：录取分数线是多少？">
-            <button class="send-btn" id="sendBtn">发送</button>
-        </div>
-    </div>
-
-    <!-- 核心：Chat SDK 代码 - 已填入你的Bot ID -->
-    <script src="https://unpkg.com/@coze/web-sdk@latest/dist/index.umd.js"></script>
+    <!-- 方案1: 使用官方最新SDK -->
     <script>
-        // 页面加载时显示提示
+        // 显示加载提示
         document.addEventListener('DOMContentLoaded', function() {
-            var loadingMsg = document.getElementById('chat-loading-msg');
-            loadingMsg.style.display = 'block';
-            
-            // 先显示内置聊天图标作为备用
-            setTimeout(function() {
-                document.getElementById('chatIcon').style.display = 'flex';
-                loadingMsg.style.display = 'none';
-            }, 2000);
+            var loading = document.getElementById('cozeLoading');
+            loading.style.display = 'flex';
         });
-
-        // 初始化内置聊天窗口功能
-        function initBackupChat() {
-            const chatIcon = document.getElementById('chatIcon');
-            const chatWindow = document.getElementById('chatWindow');
-            const closeBtn = document.getElementById('closeBtn');
-            const sendBtn = document.getElementById('sendBtn');
-            const userInput = document.getElementById('userInput');
-            const chatBody = document.getElementById('chatBody');
-
-            // 打开聊天窗口
-            chatIcon.addEventListener('click', () => {
-                chatWindow.style.display = 'flex';
-                chatIcon.style.display = 'none';
-                userInput.focus();
-            });
-
-            // 关闭聊天窗口
-            closeBtn.addEventListener('click', () => {
-                chatWindow.style.display = 'none';
-                chatIcon.style.display = 'flex';
-            });
-
-            // 发送消息
-            function sendMessage() {
-                const text = userInput.value.trim();
-                if (!text) return;
-
-                // 添加用户消息
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user-message';
-                userMsg.textContent = text;
-                chatBody.appendChild(userMsg);
-                userInput.value = '';
-
-                // 滚动到底部
-                chatBody.scrollTop = chatBody.scrollHeight;
-
-                // 模拟AI回复
-                setTimeout(() => {
-                    const botMsg = document.createElement('div');
-                    botMsg.className = 'message bot-message';
-                    botMsg.textContent = getAIResponse(text);
-                    chatBody.appendChild(botMsg);
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                }, 800);
-            }
-
-            // 发送按钮点击事件
-            sendBtn.addEventListener('click', sendMessage);
-
-            // 输入框回车事件
-            userInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
+        
+        // 动态加载SDK并初始化
+        function loadCozeSDK() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@coze/web-sdk@latest/dist/index.umd.js';
+            script.onload = initCozeSDK;
+            script.onerror = function() {
+                console.error('主CDN加载失败，尝试备用CDN...');
+                loadBackupSDK();
+            };
+            document.head.appendChild(script);
+        }
+        
+        // 备用CDN
+        function loadBackupSDK() {
+            const backupScript = document.createElement('script');
+            backupScript.src = 'https://unpkg.com/@coze/web-sdk@latest/dist/index.umd.js';
+            backupScript.onload = initCozeSDK;
+            backupScript.onerror = function() {
+                console.error('所有CDN加载失败');
+                document.getElementById('cozeLoading').innerHTML = '加载失败<br>请刷新';
+            };
+            document.head.appendChild(backupScript);
+        }
+        
+        // 初始化Coze SDK
+        function initCozeSDK() {
+            try {
+                // 等待SDK对象可用
+                if (typeof window.CozeWebSDK === 'undefined') {
+                    setTimeout(initCozeSDK, 500);
+                    return;
                 }
-            });
-
-            // 简单的AI回复逻辑
-            function getAIResponse(question) {
-                const q = question.toLowerCase();
-                if (q.includes('专业') || q.includes('招生')) {
-                    return "中山大学东莞校区今年招生的专业包括智能工程学院、生物医学工程学院、材料科学与工程学院等多个工科和新兴交叉学科专业。具体专业列表可访问招生网查看。";
-                } else if (q.includes('分数线') || q.includes('录取') || q.includes('分数')) {
-                    return "录取分数线因省份、年份和科目类别不同而有所差异。例如，2023年广东省物理类最低录取分为620分（位次约12000），历史类为615分（位次约3000）。具体可查询招生网历年数据。";
-                } else if (q.includes('宿舍') || q.includes('住宿')) {
-                    return "东莞校区宿舍为四人间，配备空调、独立卫浴、阳台和上床下桌，网络全覆盖，每栋楼有洗衣房和公共厨房，生活设施齐全。";
-                } else if (q.includes('食堂') || q.includes('饮食') || q.includes('吃饭')) {
-                    return "校区内有多个食堂，提供粤菜、川湘菜、面食、小吃等多样化选择，价格实惠（早餐3-8元，正餐8-15元），卫生安全，支持校园卡和移动支付。";
-                } else if (q.includes('强基计划')) {
-                    return "强基计划主要选拔培养基础学科拔尖学生，需在4月通过阳光高考平台报名，6月参加校测。入学后原则上不允许转专业，但可在强基计划专业内选择研究方向。";
-                } else if (q.includes('环境') || q.includes('校园')) {
-                    return "东莞校区位于松山湖科学城，环境优美，设施现代化。校园占地约2000亩，有图书馆、体育馆、实验楼、学生活动中心等完备设施，距东莞市中心30分钟车程。";
-                } else {
-                    return "感谢您的提问！关于这个问题，建议您访问中山大学本科招生网（http://admission.sysu.edu.cn）获取最准确的官方信息，或联系招生办咨询：0769-22821111。";
-                }
+                
+                console.log('Coze SDK已加载:', window.CozeWebSDK);
+                
+                // 初始化配置
+                window.CozeWebSDK.init({
+                    config: {
+                        bot_id: '7602452683702059017',
+                        server_url: 'https://api.coze.cn',
+                    },
+                    componentProps: {
+                        title: '中山大学招生咨询',
+                        placeholder: '请输入您的问题，例如：录取分数、专业介绍...',
+                        auto_trigger_welcome: true, // 自动触发欢迎语
+                        show_privacy_confirm: false, // 不显示隐私确认
+                        bubble_logo: 'https://upload.wikimedia.org/wikipedia/zh/thumb/5/5c/Sun_Yat-sen_University_Logo.svg/300px-Sun_Yat-sen_University_Logo.svg.png', // 中大logo
+                        bubble_style: {
+                            size: 'large',
+                            color: '#004098',
+                            icon_color: 'white'
+                        },
+                        chat_window_style: {
+                            header_style: {
+                                background_color: '#004098',
+                                text_color: 'white'
+                            },
+                            input_style: {
+                                background_color: '#f5f5f5'
+                            }
+                        }
+                    },
+                    onReady: function() {
+                        console.log('Coze SDK 初始化成功！');
+                        // 隐藏加载提示
+                        document.getElementById('cozeLoading').style.display = 'none';
+                        
+                        // 强制显示聊天按钮
+                        setTimeout(function() {
+                            const chatBubbles = document.querySelectorAll('[class*="coze"][class*="bubble"]');
+                            chatBubbles.forEach(bubble => {
+                                bubble.style.display = 'block !important';
+                                bubble.style.opacity = '1 !important';
+                                bubble.style.visibility = 'visible !important';
+                            });
+                        }, 1000);
+                    },
+                    onError: function(error) {
+                        console.error('Coze SDK 初始化错误:', error);
+                        document.getElementById('cozeLoading').innerHTML = '初始化失败<br>请刷新';
+                    }
+                });
+            } catch (error) {
+                console.error('初始化异常:', error);
+                document.getElementById('cozeLoading').innerHTML = '出错<br>请刷新';
             }
         }
-
-        // 初始化内置聊天系统
-        initBackupChat();
-
-        // 尝试初始化Coze官方SDK
-        let sdkLoaded = false;
+        
+        // 页面加载后开始加载SDK
+        window.addEventListener('load', function() {
+            loadCozeSDK();
+        });
+        
+        // 如果30秒后还没有SDK，显示错误
         setTimeout(function() {
-            if (typeof window.CozeWebSDK !== 'undefined') {
-                try {
-                    window.CozeWebSDK.init({
-                        config: {
-                            bot_id: '7602452683702059017'
-                        },
-                        componentProps: {
-                            title: '中山大学招生咨询',
-                            placeholder: '请输入您的问题，例如：录取分数、专业介绍...',
-                        },
-                        onReady: function() {
-                            sdkLoaded = true;
-                            console.log('Coze官方SDK加载成功！');
-                            // 如果官方SDK成功，隐藏我们的备用聊天图标
-                            document.getElementById('chatIcon').style.display = 'none';
-                        },
-                        onError: function(error) {
-                            console.error('Coze官方SDK加载错误:', error);
-                        }
-                    });
-                } catch (e) {
-                    console.error('Coze SDK初始化异常:', e);
-                }
+            const loadingEl = document.getElementById('cozeLoading');
+            if (loadingEl && loadingEl.style.display !== 'none') {
+                loadingEl.innerHTML = '请检查网络<br>刷新重试';
             }
-        }, 1000);
-
-        // 如果10秒后官方SDK仍未加载成功，确保备用聊天可用
-        setTimeout(function() {
-            if (!sdkLoaded) {
-                console.log('使用内置备用聊天系统');
-                document.getElementById('chatIcon').style.display = 'flex';
-            }
-        }, 10000);
+        }, 30000);
     </script>
 
-    <!-- 备用SDK源 -->
+    <!-- 方案2: 直接使用Coze的iframe方案（如果SDK不行） -->
     <script>
-        // 如果上面的SDK加载失败，5秒后尝试备用CDN
+        // 如果5秒后SDK还没初始化成功，尝试iframe方案
         setTimeout(function() {
-            if (typeof window.CozeWebSDK === 'undefined') {
-                console.log('尝试加载备用SDK源...');
-                var backupScript = document.createElement('script');
-                backupScript.src = 'https://cdn.jsdelivr.net/npm/@coze/web-sdk@latest/dist/index.umd.js';
-                backupScript.onload = function() {
-                    if (typeof window.CozeWebSDK !== 'undefined') {
-                        try {
-                            window.CozeWebSDK.init({
-                                config: { bot_id: '7602452683702059017' },
-                                componentProps: {
-                                    title: '中山大学招生咨询',
-                                    placeholder: '请输入您的问题...',
-                                }
-                            });
-                            console.log('备用SDK加载成功！');
-                            document.getElementById('chatIcon').style.display = 'none';
-                        } catch (e) {
-                            console.error('备用SDK初始化失败:', e);
-                        }
-                    }
+            const loadingEl = document.getElementById('cozeLoading');
+            if (loadingEl && loadingEl.style.display !== 'none') {
+                console.log('尝试使用iframe方案...');
+                
+                // 创建iframe容器
+                const iframeContainer = document.createElement('div');
+                iframeContainer.id = 'coze-iframe-container';
+                iframeContainer.style.cssText = `
+                    position: fixed;
+                    bottom: 100px;
+                    right: 30px;
+                    width: 400px;
+                    height: 600px;
+                    border: none;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    display: none;
+                    z-index: 10000;
+                    background: white;
+                `;
+                
+                // 创建iframe
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.coze.cn/space/7602452683702059017/bot?fullscreen=false&show_closed_btn=true`;
+                iframe.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    border: none;
+                    border-radius: 15px;
+                `;
+                
+                iframeContainer.appendChild(iframe);
+                document.body.appendChild(iframeContainer);
+                
+                // 修改加载提示为聊天按钮
+                loadingEl.innerHTML = '💬';
+                loadingEl.onclick = function() {
+                    iframeContainer.style.display = iframeContainer.style.display === 'none' ? 'block' : 'none';
                 };
-                document.head.appendChild(backupScript);
+                
+                // 添加关闭按钮
+                const closeBtn = document.createElement('div');
+                closeBtn.innerHTML = '×';
+                closeBtn.style.cssText = `
+                    position: absolute;
+                    top: -15px;
+                    right: -15px;
+                    width: 30px;
+                    height: 30px;
+                    background: #004098;
+                    color: white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    font-size: 20px;
+                    z-index: 10001;
+                `;
+                closeBtn.onclick = function() {
+                    iframeContainer.style.display = 'none';
+                };
+                iframeContainer.appendChild(closeBtn);
+                
+                console.log('iframe方案已准备就绪');
             }
         }, 5000);
     </script>
