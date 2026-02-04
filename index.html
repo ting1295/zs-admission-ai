@@ -17,6 +17,8 @@
         .faq-list li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border-left: 4px solid #ccc; }
         .note { background: #fff8e1; border: 1px dashed #ffb300; padding: 15px; border-radius: 10px; margin-top: 25px; text-align: center; font-size: 0.95em; color: #5d4037; }
         .footer { margin-top: 30px; text-align: center; color: #888; font-size: 0.9em; }
+        /* 聊天按钮加载前的占位提示 */
+        #chat-loading-msg { position: fixed; bottom: 90px; right: 20px; background: #004098; color: white; padding: 10px 15px; border-radius: 8px; font-size: 0.9em; display: none; }
     </style>
 </head>
 <body>
@@ -24,6 +26,7 @@
         <div class="header">
             <h1>中山大学（东莞校区）招生智能咨询中心</h1>
             <p>您好！欢迎使用官方招生AI助手。我可以为您24小时解答关于录取分数线、专业介绍、校园生活、招生政策等各类问题。</p>
+            <p><strong>请直接使用本页面右下角的聊天窗口进行咨询，全程免费，无需跳转。</strong></p>
         </div>
 
         <div class="guide-box">
@@ -33,7 +36,7 @@
                 <li>“往年【物理类/历史类】在【广东省】的录取最低分和位次是多少？”</li>
                 <li>“强基计划如何报名？入学后可以转专业吗？”</li>
                 <li>“智能工程学院和生物医学工程学院的培养特色是什么？”</li>
-                <li>“广州南校区的住宿、食堂和校园环境怎么样？”</li>
+                <li>“东莞校区的住宿、食堂和校园环境怎么样？”</li>
             </ul>
         </div>
 
@@ -46,18 +49,71 @@
         </div>
     </div>
 
-    <!-- 这里是核心：Chat SDK 代码 -->
-    <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.20/libs/cn/index.js"></script>
+    <!-- 聊天按钮加载提示 -->
+    <div id="chat-loading-msg">正在加载AI助手，请稍候...</div>
+
+    <!-- 核心：Chat SDK 代码 - 已填入你的Bot ID -->
+    <!-- 使用更通用的CDN地址 -->
+    <script src="https://unpkg.com/@coze/web-sdk@latest/dist/index.umd.js"></script>
     <script>
-        window.CozeSDK.init({
-            config: {
-                bot_id: 7602452683702059017
-            },
-            componentProps: {
-                title: '中山大学招生咨询',
-                placeholder: '请输入您的问题，例如：录取分数、专业介绍...',
-            },
+        // 页面加载时显示提示
+        document.addEventListener('DOMContentLoaded', function() {
+            var loadingMsg = document.getElementById('chat-loading-msg');
+            loadingMsg.style.display = 'block';
         });
+
+        // 初始化智能体 - 注意对象名可能是 CozeWebSDK
+        if (typeof window.CozeWebSDK !== 'undefined') {
+            window.CozeWebSDK.init({
+                config: {
+                    bot_id: '7602452683702059017' // 你的智能体ID
+                },
+                componentProps: {
+                    title: '中山大学招生咨询',
+                    placeholder: '请输入您的问题，例如：录取分数、专业介绍...',
+                },
+                onReady: function() {
+                    // SDK加载成功，隐藏提示
+                    document.getElementById('chat-loading-msg').style.display = 'none';
+                    console.log('Chat SDK 加载就绪！');
+                },
+                onError: function(error) {
+                    // 加载失败，提示用户
+                    document.getElementById('chat-loading-msg').innerHTML = 'AI助手加载失败，请刷新页面或稍后重试。';
+                    console.error('Chat SDK 加载错误:', error);
+                }
+            });
+        } else {
+            // 如果SDK对象名不对，尝试其他可能的名字
+            console.warn('CozeWebSDK 未定义，尝试查找其他SDK对象...');
+            // 这里可以添加其他SDK对象名的尝试
+            document.getElementById('chat-loading-msg').innerHTML = 'AI助手初始化遇到问题，请检查网络或联系管理员。';
+        }
+    </script>
+
+    <!-- 备用SDK源（如果上面的unpkg失败） -->
+    <script>
+        // 如果5秒后SDK仍未加载，尝试备用CDN
+        setTimeout(function() {
+            if (typeof window.CozeWebSDK === 'undefined' && typeof window.CozeSDK === 'undefined') {
+                console.log('尝试加载备用SDK源...');
+                var backupScript = document.createElement('script');
+                backupScript.src = 'https://lf-cdn.coze.com/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.20/libs/cn/index.js';
+                backupScript.onload = function() {
+                    if (typeof window.CozeSDK !== 'undefined') {
+                        window.CozeSDK.init({
+                            config: { bot_id: '7602452683702059017' },
+                            componentProps: {
+                                title: '中山大学招生咨询',
+                                placeholder: '请输入您的问题...',
+                            }
+                        });
+                        document.getElementById('chat-loading-msg').style.display = 'none';
+                    }
+                };
+                document.head.appendChild(backupScript);
+            }
+        }, 5000);
     </script>
 </body>
 </html>
