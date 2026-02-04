@@ -5,123 +5,302 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中山大学（东莞校区）招生智能咨询中心</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Microsoft YaHei', sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%); 
-            min-height: 100vh; 
-            padding: 20px; 
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif; 
         }
+        
+        body { 
+            background: linear-gradient(135deg, #f8fbff 0%, #e9f2ff 100%); 
+            min-height: 100vh; 
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
         .container { 
-            max-width: 800px; 
+            max-width: 900px; 
             margin: 0 auto;
-            background: white; 
+            background: rgba(255, 255, 255, 0.95); 
             border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0, 64, 152, 0.1); 
+            box-shadow: 0 15px 35px rgba(0, 64, 152, 0.1); 
             padding: 40px; 
             margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #004098; padding-bottom: 20px; }
-        .header h1 { color: #004098; font-size: 2.2em; margin-bottom: 10px; }
-        .header p { color: #666; font-size: 1.1em; line-height: 1.6; }
-        .guide-box { background: #f0f7ff; border-left: 5px solid #004098; padding: 20px; margin: 25px 0; border-radius: 0 10px 10px 0; }
-        .guide-box h3 { color: #004098; margin-bottom: 10px; }
-        .faq-list { margin: 25px 0; padding-left: 20px; }
-        .faq-list li { background: #f9f9f9; margin: 10px 0; padding: 15px; border-radius: 10px; border-left: 4px solid #ccc; list-style: none; }
-        .note { background: #fff8e1; border: 1px dashed #ffb300; padding: 15px; border-radius: 10px; margin-top: 25px; text-align: center; font-size: 0.95em; color: #5d4037; }
-        .footer { margin-top: 30px; text-align: center; color: #888; font-size: 0.9em; }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            padding-bottom: 30px; 
+            border-bottom: 3px solid #004098;
+            position: relative;
+        }
+        
+        .header h1 { 
+            color: #004098; 
+            font-size: 2.4em; 
+            margin-bottom: 15px; 
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header p { 
+            color: #555; 
+            font-size: 1.15em; 
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            color: #004098;
+            font-weight: 600;
+            background: linear-gradient(120deg, rgba(0, 64, 152, 0.1) 0%, rgba(0, 64, 152, 0) 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .guide-box { 
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%); 
+            border-left: 5px solid #004098; 
+            padding: 30px; 
+            margin: 35px 0; 
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 64, 152, 0.05);
+        }
+        
+        .guide-box h3 { 
+            color: #004098; 
+            margin-bottom: 20px; 
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .faq-list { 
+            margin: 25px 0; 
+            padding-left: 0;
+        }
+        
+        .faq-list li { 
+            background: linear-gradient(135deg, #ffffff 0%, #f9fbff 100%); 
+            margin: 15px 0; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border-left: 4px solid #004098;
+            list-style: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .faq-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 64, 152, 0.1);
+        }
+        
+        .faq-list li::before {
+            content: "💬";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .note { 
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%); 
+            border: 2px dashed #ffb300; 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-top: 40px; 
+            text-align: center; 
+            font-size: 1em; 
+            color: #5d4037;
+            box-shadow: 0 5px 15px rgba(255, 179, 0, 0.1);
+        }
+        
+        .footer { 
+            margin-top: 40px; 
+            text-align: center; 
+            color: #666; 
+            font-size: 0.9em;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
         
         /* 聊天按钮样式 */
         .chat-button {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #004098, #0066cc);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #004098 0%, #0066cc 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 64, 152, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 64, 152, 0.3);
             z-index: 10000;
             transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            border: 3px solid white;
         }
         
         .chat-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 64, 152, 0.4);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 12px 30px rgba(0, 64, 152, 0.4);
+            animation: none;
         }
         
         .chat-button svg {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             fill: white;
+            transition: transform 0.3s ease;
+        }
+        
+        .chat-button:hover svg {
+            transform: scale(1.2);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 25px rgba(0, 64, 152, 0.3); }
+            50% { box-shadow: 0 8px 30px rgba(0, 64, 152, 0.5); }
+            100% { box-shadow: 0 8px 25px rgba(0, 64, 152, 0.3); }
         }
         
         /* 聊天窗口样式 */
         .chat-container {
             position: fixed;
-            bottom: 100px;
+            bottom: 120px;
             right: 30px;
-            width: 380px;
-            height: 500px;
+            width: 400px;
+            height: 550px;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
             display: none;
             flex-direction: column;
             z-index: 10000;
             overflow: hidden;
+            border: 1px solid rgba(0, 64, 152, 0.1);
+            transform-origin: bottom right;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .chat-header {
-            background: #004098;
+            background: linear-gradient(135deg, #004098 0%, #0066cc 100%);
             color: white;
-            padding: 15px 20px;
+            padding: 18px 25px;
             font-weight: bold;
+            font-size: 1.1em;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
         
         .close-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             font-size: 24px;
             cursor: pointer;
             padding: 0;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
         }
         
         .chat-iframe {
             flex: 1;
             border: none;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 60px);
         }
         
+        /* 移动端适配 */
         @media (max-width: 768px) {
             .container {
-                padding: 20px;
+                padding: 25px 20px;
                 margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .guide-box {
+                padding: 20px;
+            }
+            
+            .faq-list li {
+                padding: 15px;
+                font-size: 0.95em;
             }
             
             .chat-container {
                 width: calc(100% - 40px);
-                height: 70vh;
+                height: 65vh;
                 right: 20px;
-                bottom: 80px;
+                bottom: 100px;
+                max-width: 400px;
             }
             
             .chat-button {
                 bottom: 20px;
                 right: 20px;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .chat-button svg {
+                width: 28px;
+                height: 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .chat-container {
+                height: 70vh;
+                border-radius: 15px;
             }
         }
     </style>
@@ -130,48 +309,52 @@
     <div class="container">
         <div class="header">
             <h1>中山大学（东莞校区）招生智能咨询中心</h1>
-            <p>您好！欢迎使用官方招生AI助手。我可以为您24小时解答关于录取分数线、专业介绍、校园生活、招生政策等各类问题。</p>
-            <p><strong>请直接使用本页面右下角的聊天窗口进行咨询，全程免费，无需跳转。</strong></p>
+            <p>您好！欢迎使用官方招生AI助手。我可以为您<strong class="highlight">24小时</strong>解答关于<strong class="highlight">录取分数线、专业介绍、校园生活、招生政策</strong>等各类问题。</p>
+            <p><strong>请直接点击右下角的蓝色聊天按钮进行咨询，全程免费，无需跳转。</strong></p>
         </div>
 
         <div class="guide-box">
-            <h3>💡 您可以这样问我：</h3>
+            <h3><span style="font-size: 1.3em;">💡</span> 您可以这样问我：</h3>
             <ul class="faq-list">
                 <li>"中山大学东莞校区今年招哪些专业？"</li>
                 <li>"往年【物理类/历史类】在【广东省】的录取最低分和位次是多少？"</li>
                 <li>"强基计划如何报名？入学后可以转专业吗？"</li>
                 <li>"智能工程学院和生物医学工程学院的培养特色是什么？"</li>
                 <li>"东莞校区的住宿、食堂和校园环境怎么样？"</li>
+                <li>"学费标准是多少？有哪些奖学金？"</li>
+                <li>"校园周边交通便利吗？"</li>
             </ul>
         </div>
 
         <div class="note">
-            <p>本服务由中山大学招生办（东莞组）提供，AI回答基于官方招生资料，仅供参考。如有最新变动，请以招生网正式通知为准。</p>
+            <p><strong>温馨提示：</strong>本服务由中山大学招生办（东莞组）提供，AI回答基于官方招生资料，仅供参考。如有最新变动，请以<a href="http://admission.sysu.edu.cn" style="color: #004098; text-decoration: none; font-weight: bold;" target="_blank">招生网</a>正式通知为准。</p>
         </div>
 
         <div class="footer">
-            <p>© 中山大学本科招生办公室（东莞组） 版权所有</p>
+            <p>© 中山大学本科招生办公室（东莞组）版权所有</p>
+            <p style="margin-top: 10px; font-size: 0.8em; color: #999;">联系电话：0769-22821111 | 招生官网：<a href="http://admission.sysu.edu.cn" style="color: #004098; text-decoration: none;">admission.sysu.edu.cn</a></p>
         </div>
     </div>
 
     <!-- 聊天按钮 -->
-    <div class="chat-button" id="chatButton">
+    <div class="chat-button" id="chatButton" title="点击开始咨询">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
         </svg>
     </div>
 
-    <!-- 聊天窗口（使用Coze官方iframe嵌入） -->
+    <!-- 聊天窗口 -->
     <div class="chat-container" id="chatContainer">
         <div class="chat-header">
             <span>中山大学招生AI助手</span>
-            <button class="close-btn" id="closeBtn">×</button>
+            <button class="close-btn" id="closeBtn" title="关闭">×</button>
         </div>
         <!-- Coze官方iframe嵌入 -->
         <iframe 
             class="chat-iframe" 
             id="cozeIframe"
-            allow="microphone"
+            allow="microphone *"
+            allowfullscreen
             src=""
             title="中山大学招生AI助手"
         ></iframe>
@@ -184,11 +367,14 @@
         const closeBtn = document.getElementById('closeBtn');
         const cozeIframe = document.getElementById('cozeIframe');
         
-        // Coze聊天iframe URL - 这是100%能工作的方案
+        // Coze聊天iframe URL - 使用官方托管页面
         const COZE_CHAT_URL = "https://www.coze.cn/space/7602452683702059017/bot";
         
+        // 常见问题点击自动输入
+        const faqItems = document.querySelectorAll('.faq-list li');
+        
         // 显示聊天窗口
-        function showChat() {
+        function showChat(prefillText = '') {
             // 如果是第一次打开，加载iframe
             if (!cozeIframe.src) {
                 cozeIframe.src = COZE_CHAT_URL;
@@ -197,10 +383,26 @@
             chatContainer.style.display = 'flex';
             chatButton.style.display = 'none';
             
-            // 重新调整iframe高度
-            setTimeout(() => {
-                cozeIframe.style.height = 'calc(100% - 60px)';
-            }, 100);
+            // 如果有预填文本，等待iframe加载后自动输入
+            if (prefillText) {
+                setTimeout(() => {
+                    try {
+                        const iframeWindow = cozeIframe.contentWindow;
+                        if (iframeWindow) {
+                            // 尝试在iframe中查找输入框并设置值
+                            const iframeDoc = iframeWindow.document;
+                            const input = iframeDoc.querySelector('input, textarea');
+                            if (input) {
+                                input.value = prefillText;
+                                input.focus();
+                            }
+                        }
+                    } catch (e) {
+                        // 跨域限制，忽略
+                        console.log('自动输入功能受限');
+                    }
+                }, 2000);
+            }
         }
         
         // 隐藏聊天窗口
@@ -210,10 +412,18 @@
         }
         
         // 事件监听
-        chatButton.addEventListener('click', showChat);
+        chatButton.addEventListener('click', () => showChat());
         closeBtn.addEventListener('click', hideChat);
         
-        // 点击外部关闭
+        // 常见问题点击事件
+        faqItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.textContent.replace(/[""]/g, '').trim();
+                showChat(text);
+            });
+        });
+        
+        // 点击外部关闭聊天窗口
         document.addEventListener('click', (event) => {
             if (!chatContainer.contains(event.target) && 
                 !chatButton.contains(event.target) && 
@@ -222,19 +432,7 @@
             }
         });
         
-        // 阻止iframe内的点击事件冒泡
-        cozeIframe.addEventListener('load', function() {
-            try {
-                const iframeDoc = cozeIframe.contentDocument || cozeIframe.contentWindow.document;
-                iframeDoc.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            } catch (e) {
-                // 跨域限制，忽略
-            }
-        });
-        
-        // 添加键盘ESC键关闭功能
+        // ESC键关闭聊天窗口
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && chatContainer.style.display === 'flex') {
                 hideChat();
@@ -243,18 +441,69 @@
         
         // 页面加载完成后的提示
         window.addEventListener('load', function() {
-            console.log('中山大学招生咨询页面已加载完成');
-            console.log('聊天按钮已就绪，点击右下角蓝色按钮开始咨询');
+            console.log('中山大学（东莞校区）招生咨询页面已加载完成');
+            console.log('请点击右下角蓝色按钮开始咨询');
+            
+            // 添加欢迎提示
+            setTimeout(() => {
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.style.cssText = `
+                    position: fixed;
+                    bottom: 160px;
+                    right: 30px;
+                    background: white;
+                    padding: 15px;
+                    border-radius: 12px;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+                    z-index: 9999;
+                    max-width: 300px;
+                    font-size: 14px;
+                    border-left: 4px solid #004098;
+                    animation: fadeInOut 8s forwards;
+                `;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeInOut {
+                        0% { opacity: 0; transform: translateY(10px); }
+                        10% { opacity: 1; transform: translateY(0); }
+                        90% { opacity: 1; transform: translateY(0); }
+                        100% { opacity: 0; transform: translateY(10px); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                welcomeMsg.innerHTML = `
+                    <strong>💡 使用提示：</strong><br>
+                    1. 点击蓝色按钮开始咨询<br>
+                    2. 点击问题可快速提问<br>
+                    3. 支持语音输入
+                `;
+                
+                document.body.appendChild(welcomeMsg);
+                
+                setTimeout(() => {
+                    if (welcomeMsg.parentNode) {
+                        welcomeMsg.parentNode.removeChild(welcomeMsg);
+                    }
+                }, 8000);
+            }, 2000);
         });
-    </script>
-    
-    <!-- 添加Google Analytics或百度统计（可选） -->
-    <script>
-        // 页面加载统计
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-XXXXX-Y'); // 替换为你的跟踪ID
+        
+        // iframe加载完成事件
+        cozeIframe.addEventListener('load', function() {
+            console.log('Coze聊天界面加载完成');
+            
+            // 尝试添加加载完成提示
+            try {
+                const iframeWindow = this.contentWindow;
+                if (iframeWindow) {
+                    // 可以在这里添加与iframe的通信逻辑
+                }
+            } catch (e) {
+                // 跨域限制，忽略
+            }
+        });
     </script>
 </body>
 </html>
