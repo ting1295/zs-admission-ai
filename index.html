@@ -1,12 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="./main.css" />
-  </head>
-  <body>  
-    <!-- Install SDK -->
-    <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.20/libs/cn/index.js"></script>
-    <script src="./index.js"></script>
-  </body>
-</html>
+<script>
+
+const cozeWebSDK = new CozeWebSDK.WebChatClient({
+
+config: {
+
+// 智能体 ID
+
+botId: 7602452683702059017,
+
+},
+
+auth: {
+
+// 鉴权方式
+
+type: 'token',
+
+// 鉴权密钥
+
+token: 'pat_W9Jr5VDI1vLBm2Qrmr6AYCtNM1dTwwRWvvlt4q2SZuS0z9apK69n8LNClYOkH2pE',
+
+// 备用密钥
+
+onRefreshToken: () => 'pat_W9Jr5VDI1vLBm2Qrmr6AYCtNM1dTwwRWvvlt4q2SZuS0z9apK69n8LNClYOkH2pE',
+
+}
+
+});
+
+</script>
